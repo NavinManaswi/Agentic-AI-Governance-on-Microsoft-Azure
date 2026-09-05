@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "displayName": "Agentic AI Governance Initiative",
+    "description": "Azure Policy initiative for agentic AI governance controls",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "AI Governance"
+    },
+    "parameters": {},
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "AIResourcesRestrictNetworkAccess",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ai-resources-network-access-restricted"
+      },
+      {
+        "policyDefinitionReferenceId": "AIResourcesEncryptionCMK",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ai-resources-cmk-encryption-enabled"
+      },
+      {
+        "policyDefinitionReferenceId": "AIResourcesDisableLocalAuth",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ai-resources-local-auth-disabled"
+      },
+      {
+        "policyDefinitionReferenceId": "AIResourcesPrivateEndpoint",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ai-resources-private-endpoint-enabled"
+      },
+      {
+        "policyDefinitionReferenceId": "AIResourcesDiagnosticSettings",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ai-resources-diagnostic-settings-configured"
+      },
+      {
+        "policyDefinitionReferenceId": "FoundryAgentIdentityConfigured",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/foundry-agent-identity-configured"
+      },
+      {
+        "policyDefinitionReferenceId": "FoundryAgentGuardrailsEnabled",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/foundry-agent-guardrails-enabled"
+      },
+      {
+        "policyDefinitionReferenceId": "FoundryAgentLoggingEnabled",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/foundry-agent-logging-enabled"
+      },
+      {
+        "policyDefinitionReferenceId": "PurviewDataClassificationEnabled",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/purview-data-classification-enabled"
+      }
+    ]
+  }
+}
