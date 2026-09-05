@@ -1,0 +1,71 @@
+{
+  "displayName": "Agentic AI Agent Identity Policy",
+  "description": "Entra ID Conditional Access policy for AI agents",
+  "state": "enabled",
+  "conditions": {
+    "applications": {
+      "includeApplications": [
+        "All"
+      ]
+    },
+    "users": {
+      "includeUsers": [],
+      "includeGroups": [],
+      "includeRoles": [],
+      "includeGuestsOrExternalUsers": {
+        "externalTenants": {
+          "membershipKind": "all"
+        }
+      },
+      "excludeUsers": [],
+      "excludeGuestsOrExternalUsers": {},
+      "includeAuthenticationContextClassReferences": []
+    },
+    "platforms": {
+      "includePlatforms": [
+        "all"
+      ]
+    },
+    "locations": {
+      "includeLocations": [
+        "All"
+      ]
+    },
+    "clientApplications": {
+      "includeClientApplications": [
+        "all"
+      ]
+    },
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "deviceStates": {
+      "includeDeviceStates": [
+        "All"
+      ]
+    }
+  },
+  "grantControls": {
+    "operator": "OR",
+    "builtInControls": [
+      "mfa",
+      "compliantDevice"
+    ],
+    "customAuthenticationFactors": [],
+    "termsOfUse": []
+  },
+  "sessionControls": {
+    "applicationEnforcedRestrictions": {
+      "isEnabled": true
+    },
+    "persistentBrowser": {
+      "mode": "never",
+      "isEnabled": true
+    },
+    "signInFrequency": {
+      "value": 1,
+      "type": "hours",
+      "isEnabled": true
+    }
+  }
+}
