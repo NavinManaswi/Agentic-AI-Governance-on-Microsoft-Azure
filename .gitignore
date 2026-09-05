@@ -1,0 +1,46 @@
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+*.pyc
+__pycache__/
+venv/
+env/
+.pytest_cache/
+*.pyo
+
+# Node
+node_modules/
+npm-debug.log
+
+# Azure Functions
+.local/
+bin/
+obj/
+*.generated.py
+
+# Bicep
+*.bicep.*
+.azure/
+
+# Secrets
+*.pem
+*.key
+*.crt
+.env
+*.secret
+*.secrets
+
+# Build artifacts
+*.zip
+*.tar.gz
+dist/
+build/
