@@ -1,0 +1,108 @@
+name: Deploy Agentic AI Governance on Azure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'infrastructure/**'
+      - 'policies/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate JSON files
+        run: |
+          for file in policies/**/*.json audit-framework/*.json; do
+            if [ -f "$file" ]; then
+              echo "Validating $file"
+              jq empty "$file" || exit 1
+            fi
+          done
+
+      - name: Validate Python syntax
+        run: |
+          for file in src/**/*.py governance-toolkit/*.py; do
+            if [ -f "$file" ]; then
+              echo "Validating $file"
+              python -m py_compile "$file" || exit 1
+            fi
+          done
+
+      - name: Validate Bicep templates
+        run: |
+          for file in infrastructure/*.bicep; do
+            if [ -f "$file" ]; then
+              echo "Validating $file"
+              az bicep build --file "$file" || exit 1
+            fi
+          done
+
+      - name: Check required artifacts
+        run: |
+          REQUIRED_FILES=(
+            "infrastructure/main.bicep"
+            "src/policy-engine/function_app.py"
+            "src/remediator/function_app.py"
+            "governance-toolkit/agent-governance-middleware.py"
+            "policies/entra/agent-identity-policy.json"
+            "policies/purview/agent-data-policies.json"
+            "policies/guardrails/content-safety-config.json"
+            "audit-framework/agentic-ai-governance-framework.json"
+          )
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing required file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All required artifacts are present"
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Bicep infrastructure
+        run: |
+          az deployment group create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --template-file infrastructure/main.bicep \
+            --parameters \
+              environment=dev \
+              location=${{ secrets.AZURE_LOCATION }} \
+              notificationEmail=${{ secrets.NOTIFICATION_EMAIL }} \
+              purviewAccountName=purview-agentic-${{ github.run_id }} \
+              aiFoundryResourceGroup=${{ secrets.AZURE_RESOURCE_GROUP }}
+
+      - name: Deploy Azure Policy initiatives
+        run: |
+          az policy initiative create \
+            --name agentic-ai-governance \
+            --display-name "Agentic AI Governance Initiative" \
+            --description "Azure Policy initiative for agentic AI governance" \
+            --rules infrastructure/policy-initiatives/agentic-ai-governance-policy.json || true
