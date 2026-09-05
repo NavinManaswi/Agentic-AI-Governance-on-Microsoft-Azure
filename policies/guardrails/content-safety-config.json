@@ -1,0 +1,64 @@
+{
+  "name": "Agentic AI Content Safety Configuration",
+  "description": "Azure AI Content Safety configuration for agentic AI",
+  "version": "1.0.0",
+  "contentFilters": [
+    {
+      "name": "hate",
+      "severityThreshold": "Medium"
+    },
+    {
+      "name": "sexual",
+      "severityThreshold": "Medium"
+    },
+    {
+      "name": "violence",
+      "severityThreshold": "Medium"
+    },
+    {
+      "name": "selfHarm",
+      "severityThreshold": "Medium"
+    }
+  ],
+  "promptShields": {
+    "enabled": true,
+    "action": "block",
+    "confidenceThreshold": 0.7,
+    "types": [
+      "prompt_injection",
+      "jailbreak",
+      "indirect_prompt_injection"
+    ]
+  },
+  "blocklists": {
+    "prohibitedTopics": [
+      "privilege escalation",
+      "bypass authorization",
+      "exploit tool",
+      "social engineering",
+      "data exfiltration",
+      "malware creation"
+    ],
+    "prohibitedActions": [
+      "delete",
+      "modify permissions",
+      "access unauthorized data",
+      "execute code"
+    ]
+  },
+  "protectedMaterial": {
+    "enabled": true,
+    "action": "block",
+    "threshold": 0.8
+  },
+  "groundedness": {
+    "enabled": true,
+    "threshold": 0.8,
+    "action": "block"
+  },
+  "relevance": {
+    "enabled": true,
+    "threshold": 0.7,
+    "action": "block"
+  }
+}
